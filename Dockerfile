@@ -1,24 +1,29 @@
 FROM ubuntu:16.04
 
-LABEL maintainer="Mike Ehrenberg <mvberg@gmail.com>"
-
-RUN  apt-get update \
-  && apt-get install -y wget \
-  && apt-get install -y unzip \
-  && apt-get install -y xvfb \
-  && apt-get install -y libxtst6 \
-  && apt-get install -y libxrender1 \
-  && apt-get install -y libxi6 \
-	&& apt-get install -y x11vnc \
-  && apt-get install -y socat \
-  && apt-get install -y software-properties-common \
-  && apt-get install -y dos2unix
+RUN  apt-get update
+RUN apt install -y wget
+RUN apt-get install -y unzip
+RUN apt-get install -y xvfb
+RUN apt-get install -y libxtst6
+RUN apt-get install -y libxrender1 
+RUN apt-get install -y libxi6 
+RUN apt-get install -y x11vnc 
+RUN apt-get install -y socat 
+RUN apt-get install -y software-properties-common 
+RUN apt-get install -y dos2unix 
+RUN apt install openjdk-8-jdk -y 
+RUN apt install bbe -y 
 
 # Setup IB TWS
 RUN mkdir -p /opt/TWS
 WORKDIR /opt/TWS
-RUN wget -q http://cdn.quantconnect.com/interactive/ibgateway-latest-standalone-linux-x64-v974.4g.sh
-RUN chmod a+x ibgateway-latest-standalone-linux-x64-v974.4g.sh
+# RUN wget -q http://cdn.quantconnect.com/interactive/ibgateway-latest-standalone-linux-x64-v974.4g.sh
+RUN wget -q https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh
+RUN mv tws-latest-standalone-linux-x64.sh infile
+RUN bbe -e 's,# INSTALL4J_JAVA_HOME_OVERRIDE=,INSTALL4J_JAVA_HOME_OVERRIDE=/usr/lib/jvm/java-1.8.0-openjdk-arm64,' infile > outfile
+RUN bbe -e 's,"152","312",' outfile > tws-latest-standalone-linux-x64.sh
+RUN chmod a+x tws-latest-standalone-linux-x64.sh
+# INSTALL4J_JAVA_HOME_OVERRIDE=/usr/lib/jvm/java-1.8.0-openjdk-arm64
 
 # Setup  IBController
 RUN mkdir -p /opt/IBController/ && mkdir -p /opt/IBController/Logs
@@ -30,7 +35,7 @@ RUN chmod -R u+x *.sh && chmod -R u+x Scripts/*.sh
 WORKDIR /
 
 # Install TWS
-RUN yes n | /opt/TWS/ibgateway-latest-standalone-linux-x64-v974.4g.sh
+RUN echo -e "\nn"  | /opt/TWS/tws-latest-standalone-linux-x64.sh
 
 ENV DISPLAY :0
 
