@@ -24,6 +24,7 @@ RUN bbe -e 's,# INSTALL4J_JAVA_HOME_OVERRIDE=,INSTALL4J_JAVA_HOME_OVERRIDE=/usr/
 RUN bbe -e 's,"152","312",' outfile > tws-latest-standalone-linux-x64.sh
 RUN chmod a+x tws-latest-standalone-linux-x64.sh
 # INSTALL4J_JAVA_HOME_OVERRIDE=/usr/lib/jvm/java-1.8.0-openjdk-arm64
+#/usr/local/openjdk-8
 
 # Setup  IBController
 RUN mkdir -p /opt/IBController/ && mkdir -p /opt/IBController/Logs
@@ -35,7 +36,7 @@ RUN chmod -R u+x *.sh && chmod -R u+x Scripts/*.sh
 WORKDIR /
 
 # Install TWS
-RUN echo -e "\nn"  | /opt/TWS/tws-latest-standalone-linux-x64.sh
+RUN bash -c "echo -e '\nn'  | /opt/TWS/tws-latest-standalone-linux-x64.sh"
 
 ENV DISPLAY :0
 
