@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM openjdk:8u312-jdk
 
 RUN  apt-get update
 RUN apt install -y wget
