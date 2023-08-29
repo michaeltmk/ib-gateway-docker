@@ -36,7 +36,7 @@ order_id = 1
 if __name__ == "__main__":
     
     # 連線至TWS登入中的帳戶
-    tws_conn = Connection.create(port=7497, clientId=1)
+    tws_conn = Connection.create(port=4003, clientId=1)
     tws_conn.connect()
 
     # 連線錯誤的提示訊息
